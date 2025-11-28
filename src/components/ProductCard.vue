@@ -1,6 +1,6 @@
 <template>
   <div class="product-card">
-    <img :src="product.image" alt="Product Image">
+    <img :src="productImageUrl" alt="Product Image">
     <router-link :to="`/product/${product.id}`">
       <h2>{{ product.name }}</h2>
     </router-link>
@@ -26,6 +26,27 @@ export default {
       quantity: 1
     }
   },
+
+  computed: {
+    productImageUrl() {
+      // Placeholder check
+      if (this.product.image === '/placeholder.png') return this.product.image;
+      
+      // Full URL check
+      // if (this.product.image && this.product.image.startsWith('http')) {
+      //   return this.product.image;
+      // }
+
+      // Backend Proxy Logic
+      let baseUrl = process.env.VUE_APP_PRODUCT_SERVICE_URL || 'http://localhost:3002';
+      
+      if (baseUrl.endsWith('/') && this.product.image.startsWith('/')) {
+        baseUrl = baseUrl.slice(0, -1);
+      }
+      
+      return `${baseUrl}${this.product.image}`;
+    }
+  },
   methods: {
     incrementQuantity() {
       this.quantity++
@@ -36,7 +57,6 @@ export default {
       }
     },
     addToCart() {
-      // Add the product and quantity to the cart
       this.$emit('addToCart', {
         productId: this.product.id,
         quantity: this.quantity
