@@ -41,9 +41,9 @@ export default {
     },
     productImageUrl() {
       // If no product or image, return placeholder or empty
-      if (!this.product || !this.product.image) {
-        return require('../assets/404.jpg'); // Fallback
-      }
+      // if (!this.product || !this.product.image) {
+      //   return require('../assets/404.jpg'); // Fallback
+      // }
 
       // Check if the database already has a full URL
       if (this.product.image.startsWith('http')) {
@@ -52,7 +52,7 @@ export default {
 
       // Get the Base URL from Environment Variables
       // Default to empty string if not set
-      let baseUrl = process.env.VUE_APP_PRODUCT_SERVICE_URL || '';
+      let baseUrl = process.env.VUE_APP_PRODUCT_SERVICE_URL || 'http://localhost:3002';
 
       // Clean up slashes to avoid double slashes
       if (baseUrl.endsWith('/') && this.product.image.startsWith('/')) {
