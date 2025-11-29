@@ -1,26 +1,42 @@
 <template>
   <TopNav :cartItemCount="cartItemCount"/>
-  <router-view
-    :products="products"
-    :cartItems="cartItems"
-    @addToCart="addToCart"
-    @removeFromCart="removeFromCart"
-    @submitOrder="submitOrder"
-  ></router-view>
+  
+  <div class="main-container">
+    <aside class="sidebar">
+      <FilterMenu 
+        :categories="uniqueCategories" 
+        :selectedCategory="currentCategory"
+        @filterUpdate="updateFilter"
+      />
+    </aside>
+
+    <main class="content">
+      <router-view
+        :products="filteredProducts"
+        :cartItems="cartItems"
+        @addToCart="addToCart"
+        @removeFromCart="removeFromCart"
+        @submitOrder="submitOrder"
+      ></router-view>
+    </main>
+  </div>
 </template>
 
 <script>
 import TopNav from './components/TopNav.vue'
+import FilterMenu from './components/FilterMenu.vue' // <--- IMPORT THE NEW COMPONENT
 
 export default {
   name: 'App',
   components: {
-    TopNav
+    TopNav,
+    FilterMenu // <--- REGISTER THE COMPONENT
   },
   data() {
     return {
       cartItems: [],
       products: [],
+      currentCategory: '' // <--- STATE FOR SELECTED CATEGORY
     }
   },
   computed: {
@@ -28,12 +44,31 @@ export default {
       return this.cartItems.reduce((total, item) => {
         return total + item.quantity
       }, 0)
+    },
+    // <--- LOGIC TO GET LIST OF CATEGORIES FROM PRODUCTS
+    uniqueCategories() {
+      const categories = this.products.map(p => p.category).filter(c => c);
+      return [...new Set(categories)].sort();
+    },
+    // <--- LOGIC TO FILTER THE PRODUCTS LIST
+    filteredProducts() {
+      if (this.currentCategory === '') {
+        return this.products;
+      }
+      return this.products.filter(p => p.category === this.currentCategory);
     }
   },
   mounted() {
     this.getProducts()
   },
   methods: {
+    // <--- METHOD TO HANDLE CATEGORY CLICK
+    updateFilter(category) {
+      this.currentCategory = category;
+      if (this.$route.path !== '/') {
+        this.$router.push('/');
+      }
+    },
     getProducts() {
       fetch('/products')
         .then(response => response.json())
@@ -47,15 +82,12 @@ export default {
         })
     },
     addToCart({ productId, quantity }) {
-      // check if the product is already in the cart
       const existingCartItem = this.cartItems.find(
         item => item.product.id == productId
       )
       if (existingCartItem) {
-        // if it is, increment the quantity
         existingCartItem.quantity += quantity
       } else {
-        // if not, find the product, and add it with quantity to the cart
         const product = this.products.find(product => product.id == productId)
         this.cartItems.push({ product, quantity })
       }
@@ -64,10 +96,6 @@ export default {
       this.cartItems.splice(index, 1)
     },
     submitOrder() {
-      // get the order-service URL from an environment variable
-      // const orderServiceUrl = process.env.VUE_APP_ORDER_SERVICE_URL;
-
-      // create an order object
       const order = {
         customerId: Math.floor(Math.random() * 10000000000).toString(),
         items: this.cartItems.map(item => {
@@ -81,7 +109,6 @@ export default {
 
       console.log(JSON.stringify(order));
 
-      // call the order-service using fetch
       fetch(`/order`, {
         method: 'POST',
         headers: {
@@ -111,24 +138,56 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
 body {
-  /* background-image: url('@/assets/algonquin.jpg'); */
-  background-color: white;;
+  background-color: white;
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Keeps the background in place when scrolling */
+  background-attachment: fixed;
   margin: 0;
   padding: 0;
 }
 
 #app {
-  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 120px;
+  margin-top: 120px; /* Adjust for fixed header */
 }
+
+/* --- NEW LAYOUT STYLES FOR SIDEBAR --- */
+.main-container {
+  display: flex; /* Creates side-by-side layout */
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.sidebar {
+  flex: 0 0 250px; /* Fixed width sidebar */
+  position: sticky;
+  top: 140px; /* Stick below the header */
+}
+
+.content {
+  flex: 1; /* Takes remaining space */
+  min-width: 0; /* Prevents flex items from overflowing */
+}
+
+/* Responsive: Stack them on mobile */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+/* ------------------------------------- */
 
 footer {
   position: fixed;
@@ -141,6 +200,7 @@ footer {
   margin: 0;
 }
 
+/* ... Keep your existing global styles below if needed ... */
 nav {
   display: flex;
   justify-content: space-between;
@@ -173,61 +233,6 @@ button {
   height: 42px;
 }
 
-.product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.product-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  margin: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.product-card img {
-  max-width: 100%;
-  margin-bottom: 1rem;
-}
-
-.product-card a {
-  text-decoration: none;
-  color: #333;
-}
-
-.product-card h2 {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.product-card p {
-  margin-bottom: 1rem;
-}
-
-.product-controls {
-  display: flex;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-
-.product-controls p {
-  margin-right: 20px;
-}
-
-.product-controls button:hover {
-  background-color: #005f8b;
-}
-
-.product-price {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
 .quantity-input {
   width: 50px;
   height: 30px;
@@ -235,39 +240,6 @@ button {
   border-radius: 5px;
   padding: 5px;
   margin-right: 10px;
-}
-
-.shopping-cart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.shopping-cart h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.shopping-cart-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.shopping-cart-table th,
-.shopping-cart-table td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.shopping-cart-table th {
-  font-weight: bold;
-}
-
-.shopping-cart-table td img {
-  display: block;
-  margin: 0 auto;
 }
 
 .checkout-button {
