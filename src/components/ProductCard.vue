@@ -65,3 +65,22 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .product-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+  }
+
+  img {
+    width: 100%;     
+    height: 200px;   
+    object-fit: contain; 
+    margin-bottom: 10px;
+  }
+</style>
