@@ -24,19 +24,19 @@
 
 <script>
 import TopNav from './components/TopNav.vue'
-import FilterMenu from './components/FilterMenu.vue' // <--- IMPORT THE NEW COMPONENT
+import FilterMenu from './components/FilterMenu.vue' 
 
 export default {
   name: 'App',
   components: {
     TopNav,
-    FilterMenu // <--- REGISTER THE COMPONENT
+    FilterMenu
   },
   data() {
     return {
       cartItems: [],
       products: [],
-      currentCategory: '' // <--- STATE FOR SELECTED CATEGORY
+      currentCategory: '' 
     }
   },
   computed: {
@@ -45,12 +45,10 @@ export default {
         return total + item.quantity
       }, 0)
     },
-    // <--- LOGIC TO GET LIST OF CATEGORIES FROM PRODUCTS
     uniqueCategories() {
       const categories = this.products.map(p => p.category).filter(c => c);
       return [...new Set(categories)].sort();
     },
-    // <--- LOGIC TO FILTER THE PRODUCTS LIST
     filteredProducts() {
       if (this.currentCategory === '') {
         return this.products;
@@ -62,7 +60,6 @@ export default {
     this.getProducts()
   },
   methods: {
-    // <--- METHOD TO HANDLE CATEGORY CLICK
     updateFilter(category) {
       this.currentCategory = category;
       if (this.$route.path !== '/') {
@@ -152,12 +149,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 120px; /* Adjust for fixed header */
+  margin-top: 120px; 
 }
 
-/* --- NEW LAYOUT STYLES FOR SIDEBAR --- */
 .main-container {
-  display: flex; /* Creates side-by-side layout */
+  display: flex;
   max-width: 1400px;
   margin: 0 auto;
   padding: 20px;

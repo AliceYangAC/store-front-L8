@@ -63,7 +63,7 @@ li {
 button {
   background: none;
   border: none;
-  color: #0046be; /* Best Buy Blue */
+  color: #0046be; 
   cursor: pointer;
   padding: 8px 5px;
   text-align: left;
@@ -78,7 +78,6 @@ button:hover {
   text-decoration: underline;
 }
 
-/* Active State */
 li.active button {
   background-color: #0046be;
   color: white;
