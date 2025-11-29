@@ -37,14 +37,12 @@
         })
       },
       scrollLeft() {
-        // Scroll left by 300px (approx width of one card)
         this.$refs.carousel.scrollBy({
           left: -320,
           behavior: 'smooth'
         });
       },
       scrollRight() {
-        // Scroll right by 300px
         this.$refs.carousel.scrollBy({
           left: 320,
           behavior: 'smooth'
@@ -95,11 +93,11 @@
   display: flex;
   gap: 20px;
   overflow-x: auto;
-  overflow-y: hidden; 
   align-items: stretch;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  padding: 20px; 
+  padding: 20px 10px 40px 10px; 
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -110,8 +108,11 @@
 
 .carousel-item {
   flex: 0 0 300px;
-  width: 300px; 
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  
   scroll-snap-align: start;
-  display: flex; 
+  display: flex;    
 }
 </style>
