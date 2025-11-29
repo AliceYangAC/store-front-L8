@@ -1,6 +1,5 @@
 <template>
   <div class="product-carousel-container">
-    
     <div class="carousel-header">
       <h2>Featured Products</h2>
       <div class="carousel-controls">
@@ -57,9 +56,9 @@
 
 <style scoped>
 .product-carousel-container {
-  padding: 20px;
+  padding: 10px;
   max-width: 100%;
-  overflow: hidden; /* Hide scrollbars outside the track */
+  overflow: hidden;
 }
 
 .carousel-header {
