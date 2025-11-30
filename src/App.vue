@@ -232,4 +232,28 @@ button {
   padding: 5px;
   margin-right: 10px;
 }
+.content.full-width {
+  flex: 0 0 100%; 
+  max-width: 100%;
+}
+.main-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.sidebar {
+  flex: 0 0 25%;
+  max-width: 300px; 
+  position: sticky;
+  top: 140px; 
+}
+
+.content {
+  flex: 1; 
+  min-width: 0; 
+}
 </style>
