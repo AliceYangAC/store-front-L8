@@ -2,7 +2,8 @@
   <TopNav :cartItemCount="cartItemCount"/>
   
   <div class="main-container">
-    <aside class="sidebar">
+    
+    <aside class="sidebar" v-if="$route.path === '/'">
       <FilterMenu 
         :categories="uniqueCategories" 
         :selectedCategory="currentCategory"
@@ -11,7 +12,7 @@
       />
     </aside>
 
-    <main class="content">
+    <main class="content" :class="{ 'full-width': $route.path !== '/' }">
       <router-view
         :products="filteredProducts"
         :cartItems="cartItems"
@@ -38,9 +39,8 @@ export default {
       cartItems: [],
       products: [],
       currentCategory: '',
-      // NEW: Price State
       filterMinPrice: 0,
-      filterMaxPrice: 10000 // High default
+      filterMaxPrice: 10000
     }
   },
   computed: {
@@ -51,14 +51,9 @@ export default {
       const categories = this.products.map(p => p.category).filter(c => c);
       return [...new Set(categories)].sort();
     },
-    // NEW: Updated Filter Logic (Category AND Price)
     filteredProducts() {
       return this.products.filter(p => {
-        // 1. Check Category
         const matchesCategory = this.currentCategory === '' || p.category === this.currentCategory;
-        
-        // 2. Check Price
-        // Ensure we parse to float in case data is string
         const price = parseFloat(p.price); 
         const matchesPrice = price >= this.filterMinPrice && price <= this.filterMaxPrice;
 
@@ -74,7 +69,6 @@ export default {
       this.currentCategory = category;
       if (this.$route.path !== '/') this.$router.push('/');
     },
-    // NEW: Handle Price Update
     updatePrice({ min, max }) {
       this.filterMinPrice = min;
       this.filterMaxPrice = max;
@@ -100,7 +94,6 @@ export default {
       this.cartItems.splice(index, 1)
     },
     submitOrder() {
-      // ... (Existing order logic remains unchanged) ...
       const order = {
         customerId: Math.floor(Math.random() * 10000000000).toString(),
         items: this.cartItems.map(item => ({
@@ -129,7 +122,10 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
 body {
-  background-color: #f9f9f9; /* Light gray background for better contrast */
+  background-color: #f9f9f9;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   margin: 0;
   padding: 0;
 }
@@ -143,39 +139,37 @@ body {
   margin-top: 120px;
 }
 
-/* --- GRID LAYOUT (col-md-3 equivalent) --- */
 .main-container {
   display: flex;
   max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
-  gap: 20px; /* Space between Sidebar and Content */
+  gap: 20px;
   align-items: flex-start;
 }
 
 .sidebar {
-  /* This mimics col-md-3 (25% width) */
-  flex: 0 0 25%; 
-  max-width: 300px; /* Optional cap so it doesn't get too wide on huge screens */
-  
-  /* Sticky Position */
+  flex: 0 0 25%;
+  max-width: 300px;
   position: sticky;
-  top: 140px; 
+  top: 140px;
 }
 
 .content {
-  /* This mimics col-md-9 (75% remaining space) */
   flex: 1;
-  min-width: 0; 
+  min-width: 0;
 }
 
-/* Mobile Responsive */
+.content.full-width {
+  flex: 0 0 100%; 
+  max-width: 100%;
+}
+
 @media (max-width: 768px) {
   .main-container {
     flex-direction: column;
   }
   .sidebar {
-    /* Full width on mobile */
     flex: 0 0 100%;
     width: 100%;
     max-width: none;
@@ -183,7 +177,6 @@ body {
     margin-bottom: 20px;
   }
 }
-/* ------------------------------------- */
 
 footer {
   position: fixed;
@@ -196,7 +189,28 @@ footer {
   margin: 0;
 }
 
-/* Keep other existing styles */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin: 0 1rem;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+}
+
 button {
   padding: 10px;
   background-color: #005f8b;
@@ -208,5 +222,14 @@ button {
 }
 .checkout-button:hover {
   background-color: #005f8b;
+}
+
+.quantity-input {
+  width: 50px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 10px;
 }
 </style>
