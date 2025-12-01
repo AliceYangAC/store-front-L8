@@ -244,8 +244,6 @@ td {
 
 .continue-btn {
   margin-top: 20px;
-  background-color: #0046be;
-  color: white;
   padding: 10px 25px;
 }
 

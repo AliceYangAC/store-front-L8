@@ -274,8 +274,11 @@ export default {
 }
 
 .rec-section-wrapper {
+    width: 100%; 
     max-width: 1200px;
     margin: 40px auto;
+    padding: 0 20px; 
+    box-sizing: border-box; 
 }
 
 .not-found {
