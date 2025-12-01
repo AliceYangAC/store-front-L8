@@ -39,19 +39,16 @@
           <input type="number" v-model="quantity" min="1" class="quantity-input" aria-label="Quantity" />
           <button class="add-btn" @click="addToCart">Add to Cart</button>
         </div>
-        
-        <div class="rec-section-wrapper" v-if="productExists">
-          <ProductRec 
-            :currentProductId="product.id" 
-            :allProducts="products"
-            @addToCart="addToCartFromRec" 
-          />
-        </div>
       </div>
     </div>
-
   </div>
-
+    <div class="rec-section-wrapper" v-if="productExists">
+    <ProductRec 
+      :currentProductId="product.id" 
+      :allProducts="products"
+      @addToCart="addToCartFromRec" 
+    />
+  </div>
   <div class="not-found" v-else>
     <img src="../assets/404.jpg" alt="Product not found" />
     <h3>Oops! That product was not found...</h3>
