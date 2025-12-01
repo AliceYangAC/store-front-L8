@@ -228,14 +228,14 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
-  background-color: #FFF007;
+  background-color: #ffe000;
   color: black;
   margin-right: 15px;
   margin-left: 15px;
 }
 
 .add-btn:hover {
-  background-color: #ffe000;
+  background-color: #fff007;
   color: black
 }
 
@@ -276,7 +276,6 @@ export default {
 .rec-section-wrapper {
     max-width: 1200px;
     margin: 40px auto;
-    padding: 0 20px; 
 }
 
 .not-found {

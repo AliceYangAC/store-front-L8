@@ -59,7 +59,7 @@
           type="range" 
           :value="maxPrice === '' ? maxPriceLimit : maxPrice" 
           @input="sliderChange('max', $event)" 
-          min="0" 
+          min="1" 
           :max="maxPriceLimit"   step="10"
           class="slider"
         >
@@ -127,6 +127,16 @@ export default {
     updatePrice() {
       let effectiveMin = (this.minPrice === '' || this.minPrice === null) ? 0 : parseFloat(this.minPrice);
       let effectiveMax = (this.maxPrice === '' || this.maxPrice === null) ? Infinity : parseFloat(this.maxPrice);
+
+      if (effectiveMax !== Infinity && effectiveMax > this.maxPriceLimit) {
+        effectiveMax = this.maxPriceLimit;
+        this.maxPrice = this.maxPriceLimit; 
+      }
+      
+      if (effectiveMin > this.maxPriceLimit) {
+          effectiveMin = this.maxPriceLimit;
+          this.minPrice = this.maxPriceLimit;
+      }
 
       if (effectiveMax !== Infinity && effectiveMin > effectiveMax) {
          effectiveMin = effectiveMax; 

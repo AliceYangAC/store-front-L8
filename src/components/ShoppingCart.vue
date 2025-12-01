@@ -215,7 +215,7 @@ td {
 
 .checkout-button {
   padding: 12px 40px;
-  background-color: #FFF007; /* Best Buy Yellow */
+  background-color: #ffe000; /* Best Buy Yellow */
   color: black;
   font-weight: bold;
   font-size: 1.1rem;
@@ -226,7 +226,7 @@ td {
 }
 
 .checkout-button:hover {
-  background-color: #ffe000;
+  background-color: #fff007;
 }
 
 /* Empty State */
