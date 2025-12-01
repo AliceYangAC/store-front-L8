@@ -17,6 +17,7 @@
     </ul>
   </nav>
 </template>
+
 <script>
 import SearchBar from './SearchBar.vue';
 
@@ -27,9 +28,14 @@ export default {
   },
   props: {
     cartItemCount: Number,
-    products: {           
+    products: {
       type: Array,
       default: () => []
+    }
+  },
+  data() {
+    return {
+      isNavOpen: false
     }
   },
   methods: {
@@ -46,8 +52,7 @@ export default {
 <style scoped>
 nav {
   display: flex;
-  /* CHANGED: Use space-around/space-evenly to center the search bar */
-  justify-content: flex-start; 
+  justify-content: space-between; 
   align-items: center;
   background-color: #0046BE;
   color: #fff;
@@ -59,16 +64,13 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100; /* Ensure nav is above all content */
+  z-index: 100;
 }
 
-/* NEW: Style for the SearchBar wrapper */
 .search-container {
-    /* Allows the search bar to grow and take up maximum space */
-    flex-grow: 1; 
-    /* Ensures minimum spacing from the logo */
+    flex-grow: 0; 
     margin: 0 20px; 
-    max-width: 500px; /* Limits size on very wide screens */
+    max-width: 500px;
 }
 
 nav img {
@@ -77,12 +79,17 @@ nav img {
 }
 
 .nav-links {
-  /* Ensure links don't shrink and are pushed to the right */
   flex-shrink: 0; 
   display: flex;
   list-style: none;
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+/* FIX: Ensure anchor links inside the list items are white */
+.nav-links li a {
+  color: white; 
+  text-decoration: none;
 }
 
 .hamburger {
@@ -92,9 +99,6 @@ nav img {
   cursor: pointer;
   padding: 0;
   margin: 0;
-  
-  /* FIX ALIGNMENT ISSUE: Remove old magic number (-40px) 
-     and rely on align-items: center in 'nav' */
   margin-top: 0; 
 }
 
@@ -149,11 +153,7 @@ nav img {
     background-color: #333;
     padding: 1rem;
   }
-  
-  .nav-links a {
-  color: white; /* Ensure links are explicitly white */
-  text-decoration: none;
-}
+
   .nav-links--open {
     display: block;
   }
