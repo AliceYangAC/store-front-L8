@@ -1,5 +1,5 @@
 <template>
-  <div class="search-container" @keydown.enter="performSearch">
+  <div class="search-container" @keydown.enter.prevent="performSearch">
     <div class="search-input-wrapper">
       <input 
         type="search"
@@ -19,8 +19,10 @@
       </button>
     </div>
     
-    <!-- 3. Suggestion Dropdown -->
-    <ul v-if="searchTerm && suggestions.length && showSuggestions" class="suggestions-dropdown">
+    <ul 
+      v-if="searchTerm && suggestions.length && showSuggestions" 
+      class="suggestions-dropdown vertical-list"
+    >
       <li
         v-for="(product, index) in suggestions"
         :key="product.id"
@@ -31,7 +33,6 @@
         {{ product.name }}
       </li>
     </ul>
-
   </div>
 </template>
 
@@ -55,9 +56,8 @@ export default {
       highlightedIndex: -1,
     };
   },
-  emits: ['search'], // 👈 Emits the final search term for filtering
+  emits: ['search'],
   created() {
-    // Debounces the search logic to run only after 300ms of inactivity
     this.handleSearch = useDebounceFn(this.triggerSuggestions, 300);
   },
   methods: {
@@ -68,7 +68,6 @@ export default {
         this.suggestions = [];
         this.showSuggestions = false;
       } else {
-        // Filter the local product list for suggestions
         this.suggestions = this.products.filter(product =>
           product.name && product.name.toLowerCase().includes(query)
         ).slice(0, 7);
@@ -77,16 +76,15 @@ export default {
     },
     
     performSearch() {
-      // If an item is highlighted (keyboard navigation), go to detail page
       if (this.highlightedIndex !== -1) {
         this.goToProductPage(this.suggestions[this.highlightedIndex]);
-        return;
+        return; 
       }
       
-      // If text is entered, emit the event to App.vue to filter the ProductList
       if (this.searchTerm.trim() !== '') {
         this.$emit('search', this.searchTerm);
         this.showSuggestions = false;
+        this.highlightedIndex = -1; 
       }
     },
     
@@ -95,9 +93,9 @@ export default {
       this.$router.push(`/product/${productId}`);
       this.searchTerm = '';
       this.showSuggestions = false;
+      this.highlightedIndex = -1;
     },
     
-    // Keyboard navigation handlers
     highlightNext() {
       if (!this.suggestions.length) return;
       this.highlightedIndex = (this.highlightedIndex + 1) % this.suggestions.length;
@@ -107,7 +105,6 @@ export default {
       this.highlightedIndex = (this.highlightedIndex - 1 + this.suggestions.length) % this.suggestions.length;
     },
     hideSuggestions() {
-      // Small delay to allow click event on suggestion to register before hiding
       setTimeout(() => {
         this.showSuggestions = false;
         this.highlightedIndex = -1;
@@ -126,15 +123,15 @@ export default {
 .search-input-wrapper {
   display: flex;
   align-items: center;
-  border: 1px solid #0046BE; /* Best Buy Look */
-  border-radius: 4px; 
+  border: 1px solid #0046BE;
+  border-radius: 4px;
   background-color: #fff;
 }
 
 .search-input {
   flex-grow: 1;
   border: none;
-  padding: 10px 45px 10px 15px; 
+  padding: 10px 45px 10px 15px;
   font-size: 1rem;
   outline: none;
   background-color: transparent;
@@ -163,7 +160,6 @@ export default {
   color: #0046BE;
 }
 
-/* Dropdown Styling */
 .suggestions-dropdown {
   position: absolute;
   top: 100%;
@@ -180,9 +176,11 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-height: 400px;
   overflow-y: auto;
+  display: block; 
 }
 
 .suggestions-dropdown li {
+  display: block;
   padding: 10px 15px;
   cursor: pointer;
   text-align: left;
