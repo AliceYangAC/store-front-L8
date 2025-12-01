@@ -1,14 +1,16 @@
 <template>
   <div class="search-results-container">
     <div class="list-header">
-      <div class="search-title">
+      
+      <router-link to="/" class="back-link">
+        <button class="button">← Back to All Products</button>
+      </router-link>
+
+      <div class="search-info-group">
         <h2>Search Results for "{{ currentSearchQuery }}"</h2>
         <span class="product-count">{{ filteredResults.length }} items</span>
       </div>
-      
-      <router-link to="/">
-        <button class="button">← Back to All Products</button>
-      </router-link>
+
     </div>
 
     <div class="product-grid">
@@ -74,18 +76,40 @@ export default {
     padding: 0 20px;
 }
 
+/* Updated Header Layout */
 .list-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Pushes button and title to edges */
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
-.search-title h2 {
-    margin-top: 0;
+.search-info-group {
+    /* New container for H2 and SPAN */
+    display: flex;
+    align-items: baseline; /* Align H2 and SPAN vertically */
+    gap: 20px;
+}
+
+/* Back Button Alignment */
+.back-link {
+    flex-shrink: 0; /* Ensures the button doesn't shrink */
+}
+
+/* Title Styling */
+.search-info-group h2 {
+    margin: 0;
     font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+/* Item Count Styling (Copied from ProductList) */
+.product-count {
+    color: #666; /* Note: ProductList uses #666, not #2c3e50 */
+    font-weight: bold;
+    font-size: 0.9rem; /* Slightly smaller than H2 */
 }
 
 .product-grid {
