@@ -216,7 +216,7 @@ button {
   height: 42px;
 }
 
-.button:hover {
+.button:focus {
  color: #FFF007;
 }
 
