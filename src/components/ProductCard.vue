@@ -104,6 +104,11 @@ export default {
   overflow: hidden;
 }
 
+.product-card a {
+    color: #333; /* Dark gray/black for readability on white background */
+    text-decoration: none; 
+}
+
 img {
   width: 100%;
   height: 120px;

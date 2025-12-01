@@ -11,7 +11,9 @@
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-router": "^4.2.2",
-    "webpack": "^5.94.0"
+    "webpack": "^5.94.0",
+    "primevue": "^3.50.0", 
+    "primeicons": "^7.0.0" 
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

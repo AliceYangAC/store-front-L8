@@ -5,6 +5,9 @@
         <img src="/best-buy-logo.png" alt="Best Buy Logo">
       </a>
     </div>
+    
+    <SearchBar :products="products" /> 
+
     <button class="hamburger" @click="toggleNav">
       <span class="hamburger-icon"></span>
     </button>
@@ -14,14 +17,19 @@
     </ul>
   </nav>
 </template>
-
 <script>
+import SearchBar from './SearchBar.vue';
+
 export default {
   name: 'TopNav',
-  props: ['cartItemCount'],
-  data() {
-    return {
-      isNavOpen: false
+  components: {
+    SearchBar 
+  },
+  props: {
+    cartItemCount: Number,
+    products: {           
+      type: Array,
+      default: () => []
     }
   },
   methods: {
@@ -38,7 +46,8 @@ export default {
 <style scoped>
 nav {
   display: flex;
-  justify-content: space-between;
+  /* CHANGED: Use space-around/space-evenly to center the search bar */
+  justify-content: flex-start; 
   align-items: center;
   background-color: #0046BE;
   color: #fff;
@@ -50,6 +59,16 @@ nav {
   top: 0;
   left: 0;
   right: 0;
+  z-index: 100; /* Ensure nav is above all content */
+}
+
+/* NEW: Style for the SearchBar wrapper */
+.search-container {
+    /* Allows the search bar to grow and take up maximum space */
+    flex-grow: 1; 
+    /* Ensures minimum spacing from the logo */
+    margin: 0 20px; 
+    max-width: 500px; /* Limits size on very wide screens */
 }
 
 nav img {
@@ -58,6 +77,8 @@ nav img {
 }
 
 .nav-links {
+  /* Ensure links don't shrink and are pushed to the right */
+  flex-shrink: 0; 
   display: flex;
   list-style: none;
   font-size: 1.2rem;
@@ -71,7 +92,10 @@ nav img {
   cursor: pointer;
   padding: 0;
   margin: 0;
-  margin-top: -40px;
+  
+  /* FIX ALIGNMENT ISSUE: Remove old magic number (-40px) 
+     and rely on align-items: center in 'nav' */
+  margin-top: 0; 
 }
 
 .hamburger-icon {
@@ -104,16 +128,32 @@ nav img {
 }
 
 @media (max-width: 768px) {
+  .search-container {
+    order: 3; 
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 0.5rem 1rem;
+    background-color: #0046BE; 
+  }
+
   .nav-links {
     display: none;
     position: absolute;
-    top: 100%;
+    top: calc(100% + 50px); 
     left: 0;
     right: 0;
     background-color: #333;
     padding: 1rem;
   }
-
+  
+  .nav-links a {
+  color: white; /* Ensure links are explicitly white */
+  text-decoration: none;
+}
   .nav-links--open {
     display: block;
   }

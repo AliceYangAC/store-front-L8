@@ -206,11 +206,6 @@ li {
   margin: 0 1rem;
 }
 
-a {
-  color: #fff;
-  text-decoration: none;
-}
-
 button {
   padding: 10px;
   background-color: #005f8b;
