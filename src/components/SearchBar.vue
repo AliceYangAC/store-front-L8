@@ -76,19 +76,22 @@ export default {
     },
     
     performSearch() {
+      // Navigation on highlighted suggestion (still goes to product details)
       if (this.highlightedIndex !== -1) {
         this.goToProductPage(this.suggestions[this.highlightedIndex]);
         return; 
       }
       
+      // Main Search Action: Go to search results view 
       if (this.searchTerm.trim() !== '') {
-        this.$emit('search', this.searchTerm);
+        this.$router.push({ path: '/search', query: { q: this.searchTerm } }); // 👈 NEW ROUTE
         this.showSuggestions = false;
         this.highlightedIndex = -1; 
       }
     },
     
     goToProductPage(product) {
+      // Navigates to the product detail page from a suggestion click
       const productId = product.id;
       this.$router.push(`/product/${productId}`);
       this.searchTerm = '';
