@@ -135,7 +135,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #0046BE;
   margin-top: 120px;
 }
 
@@ -208,15 +208,16 @@ li {
 
 button {
   padding: 10px;
-  background-color: #005f8b;
+  background-color: #0046BE;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   height: 42px;
 }
-.checkout-button:hover {
-  background-color: #005f8b;
+
+.button:hover {
+ color: #FFF007;
 }
 
 .quantity-input {

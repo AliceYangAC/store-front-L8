@@ -109,7 +109,6 @@ export default {
 .product-count {
     color: #666; /* Note: ProductList uses #666, not #2c3e50 */
     font-weight: bold;
-    font-size: 0.9rem; /* Slightly smaller than H2 */
 }
 
 .product-grid {
