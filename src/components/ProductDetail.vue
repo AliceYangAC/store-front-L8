@@ -42,13 +42,13 @@
       </div>
       <br /><br />
     </div>
-          <div class="rec-section-wrapper" v-if="productExists">
-        <ProductRec 
-          :currentProductId="product.id" 
-          :allProducts="products"
-          @addToCart="addToCartFromRec" 
-        />
-      </div>
+        <div class="rec-section-wrapper" v-if="productExists">
+      <ProductRec 
+        :currentProductId="product.id" 
+        :allProducts="products"
+        @addToCart="addToCartFromRec" 
+      />
+    </div>
   </div>
 
   <div class="not-found" v-else>
@@ -228,7 +228,7 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
-  background-color: #bca600;
+  background-color: #FFF007;
   color: black;
   margin-right: 15px;
   margin-left: 15px;
@@ -274,8 +274,9 @@ export default {
 }
 
 .rec-section-wrapper {
-    /* max-width: 1200px; */
-    margin: 15px auto;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px; 
 }
 
 .not-found {
