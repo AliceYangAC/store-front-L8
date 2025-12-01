@@ -228,6 +228,10 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
+  background-color: #bca600;
+  color: black;
+  margin-right: 15px;
+  margin-left: 15px;
 }
 
 .add-btn:hover {
@@ -270,9 +274,8 @@ export default {
 }
 
 .rec-section-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px 40px 20px;
+    /* max-width: 1200px; */
+    margin: 15px auto;
 }
 
 .not-found {
