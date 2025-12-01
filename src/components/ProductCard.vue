@@ -122,6 +122,10 @@ h2 {
   line-height: 1.2;
 }
 
+h2:hover {
+  color: #0046BE;
+}
+
 .description {
   font-size: 0.85rem;
   color: #555;

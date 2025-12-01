@@ -1,9 +1,9 @@
 <template>
   <nav>
     <div class="logo">
-      <a href="/">
+      <router-link to="/" @click="closeNav">
         <img src="/best-buy-logo.png" alt="Best Buy Logo">
-      </a>
+      </router-link>
     </div>
     
     <SearchBar :products="products" /> 

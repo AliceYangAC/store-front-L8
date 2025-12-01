@@ -66,6 +66,16 @@ export default {
   grid-template-columns: repeat(3, 1fr); 
   gap: 20px; 
   align-items: stretch;
+
+  /* --- SCROLLING LOGIC START --- */
+  overflow-y: auto; /* Enable vertical scrolling */
+  
+  /* Restrict height so it scrolls within the view. 
+     100vh (screen) - 120px (Nav) - 100px (Header/Padding buffer) */
+  max-height: calc(100vh - 220px); 
+  
+  padding-right: 10px; /* Prevent scrollbar from covering card edges */
+  /* --- SCROLLING LOGIC END --- */
 }
 
 .grid-item {

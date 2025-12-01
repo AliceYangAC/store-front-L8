@@ -1,25 +1,53 @@
 <template>
-  <br>
-  <div class="product-detail" v-if="productExists">
-    <div class="product-image">
-      <img :src="productImageUrl" :alt="product.name" />
-    </div>
-    <div class="product-info">
-      <h2>{{ product.name }}</h2>
-      <small>Product ID: {{ product.id }}</small>
-      <p>{{ product.description }}</p>
-      <div class="product-controls">
-        <p>
-          <b>Price: <span class="price">{{ product.price }}</span></b>
-        </p>
-        <input type="number" v-model="quantity" min="1" class="quantity-input" />
-        <button @click="addToCart">Add to Cart</button>
+  <div class="detail-container" v-if="productExists">
+    
+    <div class="image-column">
+      <div class="square-image-wrapper">
+        <img :src="productImageUrl" :alt="product.name" />
       </div>
     </div>
+
+    <div class="info-column">
+      <div class="product-header">
+        <h1>{{ product.name }}</h1>
+        
+        <div class="meta-row">
+          <span class="sku-label">Code: {{ product.id }}</span>
+          
+          <button 
+            v-if="product.category" 
+            class="category-badge" 
+            @click="searchCategory(product.category)"
+            title="Search for products in this category"
+          >
+            {{ product.category }}
+          </button>
+        </div>
+
+      </div>
+
+      <div class="description-section">
+        <h3>Overview</h3>
+        <p>{{ product.description }}</p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="purchase-section">
+        <div class="price-tag">${{ product.price }}</div>
+        
+        <div class="controls-row">
+          <input type="number" v-model="quantity" min="1" class="quantity-input" aria-label="Quantity" />
+          <button class="add-btn" @click="addToCart">Add to Cart</button>
+        </div>
+      </div>
+
+    </div>
   </div>
-  <div class="product-detail" v-else>
+
+  <div class="not-found" v-else>
     <img src="../assets/404.jpg" alt="Product not found" />
-    <h3>Opps! That product was not found...</h3>
+    <h3>Oops! That product was not found...</h3>
   </div>
 </template>
 
@@ -40,26 +68,18 @@ export default {
       return !!this.product;
     },
     productImageUrl() {
-      // If no product or image, return placeholder or empty
-      // if (!this.product || !this.product.image) {
-      //   return require('../assets/404.jpg'); // Fallback
-      // }
-
-      // Check if the database already has a full URL
+      if (this.product.image === '/placeholder.png') return this.product.image;
+      
       if (this.product.image.startsWith('http')) {
         return this.product.image;
       }
 
-      // Get the Base URL from Environment Variables
-      // Default to empty string if not set
       let baseUrl = process.env.VUE_APP_PRODUCT_SERVICE_URL || 'http://localhost:3002';
 
-      // Clean up slashes to avoid double slashes
       if (baseUrl.endsWith('/') && this.product.image.startsWith('/')) {
         baseUrl = baseUrl.slice(0, -1);
       }
 
-      // Combine them
       return `${baseUrl}${this.product.image}`;
     }
   },
@@ -69,53 +89,176 @@ export default {
         productId: this.product.id,
         quantity: this.quantity
       })
+    },
+    searchCategory(category) {
+      this.$router.push({ path: '/search', query: { q: category } });
     }
   }
 }
 </script>
 
 <style scoped>
-a {
-  color: #0000FF;
-  text-decoration: underline;
-}
-
-.product-detail {
-  text-align: left;
+.detail-container {
   display: flex;
+  flex-wrap: wrap; 
+  max-width: 1200px;
+  /* margin: 15px auto; */
+  padding: 0 20px;
+  gap: 40px;
   align-items: flex-start;
+}
+
+.image-column {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin: 1rem;
 }
 
-.product-image {
-  flex: 1;
+.square-image-wrapper {
+  width: 500px;
+  height: 500px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.product-image img {
+.square-image-wrapper img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain; 
 }
 
-.product-info {
+.info-column {
   flex: 1;
+  min-width: 300px;
   text-align: left;
 }
 
-.product-info h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
+.product-header h1 {
+  font-size: 2rem;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+  color: #111;
 }
 
-.product-info p {
-  font-size: 16px;
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
-  .product-detail {
+.sku-label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.category-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #0046be; 
+  background-color: #f0f6ff; 
+  border: 1px solid #0046be;
+  border-radius: 16px; 
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  line-height: 1;
+  height: auto; 
+  min-height: unset;
+}
+
+.category-badge:hover {
+  background-color: #0046be;
+  color: white;
+  text-decoration: none;
+}
+.purchase-section {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.price-tag {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #111;
+  margin-bottom: 15px;
+}
+
+.controls-row {
+  display: flex;
+  gap: 10px;
+  height: 44px;
+}
+
+.quantity-input {
+  width: 60px;
+  padding: 0 10px;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.add-btn {
+  flex: 1; 
+  font-weight: bold;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-btn:hover {
+  background-color: #ffe000;
+  color: black
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 30px 0;
+}
+
+.description-section {
+    margin-bottom: 20px;
+}
+
+.description-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.description-section p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+@media (max-width: 900px) {
+  .detail-container {
     flex-direction: column;
   }
+
+  .square-image-wrapper {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-width: 500px;
+  }
+}
+
+.not-found {
+  margin-top: 50px;
 }
 </style>

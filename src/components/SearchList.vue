@@ -57,13 +57,19 @@ export default {
         return [];
       }
       
-      return this.products.filter(product =>
-        product.name.toLowerCase().includes(query)
-      );
+      return this.products.filter(product => {
+        // 1. Check Name
+        const nameMatch = product.name.toLowerCase().includes(query);
+        
+        // 2. Check Category (Ensure property exists first)
+        const categoryMatch = product.category && product.category.toLowerCase().includes(query);
+
+        // Return true if EITHER matches
+        return nameMatch || categoryMatch;
+      });
     }
   },
   methods: {
-    
     addToCart(event) {
         this.$emit('addToCart', event);
     }
@@ -78,6 +84,7 @@ export default {
     padding: 0 20px;
 }
 
+/* Back Button Link */
 .back-link-margin {
     display: block; 
     text-align: left;
@@ -88,12 +95,14 @@ export default {
     font-weight: bold;
 }
 
+/* Header Container */
 .list-header {
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
+/* Flex Row for Heading and Count */
 .header-content {
     display: flex;
     justify-content: space-between; 
