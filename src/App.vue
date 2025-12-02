@@ -103,25 +103,62 @@ export default {
     removeFromCart(index) {
       this.cartItems.splice(index, 1)
     },
-    submitOrder() {
+    submitOrder(checkoutData) {
+      if (!checkoutData) return;
+
       const order = {
         customerId: Math.floor(Math.random() * 10000000000).toString(),
         items: this.cartItems.map(item => ({
             productId: item.product.id,
             quantity: item.quantity,
             price: item.product.price
-        }))
+        })),
+        shipping: checkoutData.shipping,
+        payment: checkoutData.payment,
+        addressConfirmed: checkoutData.addressConfirmed 
       }
+
       fetch(`/order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order)
-      }).then(response => {
-          if (!response.ok) alert('Error');
-          else {
+      })
+      .then(async response => {
+          const data = await response.json();
+          if (response.ok) {
             this.cartItems = [];
-            alert('Order submitted');
+            alert('Order submitted successfully!');
+            if (this.$route.path !== '/') this.$router.push('/');
+            return;
           }
+
+          if (response.status === 409 && data.suggestion) {
+            const useSuggestion = confirm(
+              `We found a better match for your address:\n\n` +
+              `Input: ${order.shipping.address1}, ${order.shipping.city}\n` +
+              `Suggestion: ${data.suggestion.address1}, ${data.suggestion.city}, ${data.suggestion.postalCode}\n\n` +
+              `Do you want to use the suggestion?`
+            );
+
+            if (useSuggestion) {
+              checkoutData.shipping = { ...checkoutData.shipping, ...data.suggestion };
+              checkoutData.addressConfirmed = true;
+              this.submitOrder(checkoutData);
+            } else {
+              const forceOriginal = confirm("Do you want to use your original address anyway?");
+              if (forceOriginal) {
+                checkoutData.addressConfirmed = true;
+                this.submitOrder(checkoutData);
+              }
+            }
+            return;
+          }
+
+          alert(`Error: ${data.error || 'Unknown error'}`);
+      })
+      .catch(error => {
+          console.log(error);
+          alert('Network error occurred');
       })
     }
   },

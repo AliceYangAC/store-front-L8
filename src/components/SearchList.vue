@@ -84,7 +84,6 @@ export default {
     padding: 0 20px;
 }
 
-/* Back Button Link */
 .back-link-margin {
     display: block; 
     text-align: left;
@@ -95,7 +94,11 @@ export default {
     font-weight: bold;
 }
 
-/* Header Container */
+.back-link-margin:hover {
+    color: #002a80;
+    text-decoration: none;
+}
+
 .list-header {
     margin-bottom: 20px;
     padding-bottom: 10px;

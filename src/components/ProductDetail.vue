@@ -33,11 +33,17 @@
       <hr class="divider">
 
       <div class="purchase-section">
-        <div class="price-tag">${{ product.price }}</div>
+        <div class="price-box">
+          <div class="price-tag">${{ product.price }}</div>
+        </div>
         
-        <div class="controls-row">
-          <input type="number" v-model="quantity" min="1" class="quantity-input" aria-label="Quantity" />
-          <button class="add-btn" @click="addToCart">Add to Cart</button>
+        <div class="vertical-separator"></div>
+        
+        <div class="controls-box">
+          <div class="controls-row">
+            <input type="number" v-model="quantity" min="1" class="quantity-input" aria-label="Quantity" />
+            <button class="add-btn" @click="addToCart">Add to Cart</button>
+          </div>
         </div>
       </div>
     </div>
@@ -111,8 +117,7 @@ export default {
   display: flex;
   flex-wrap: wrap; 
   width: 100%;
-  /* max-width: 1200px; */
-  margin: 15px auto;
+  margin: 0 auto;
   padding: 0 20px;
   gap: 40px;
   align-items: flex-start;
@@ -190,24 +195,51 @@ export default {
   color: white;
   text-decoration: none;
 }
+
 .purchase-section {
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
+  display: flex;
+  align-items: center; 
+  justify-content: space-between; 
+}
+
+.price-box, .controls-box {
+  flex: 1; 
+  display: flex;
+  align-items: left;
+}
+
+.price-box {
+  justify-content: left; 
+}
+
+.controls-box {
+  justify-content: right; 
 }
 
 .price-tag {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   color: #111;
-  margin-bottom: 15px;
+  margin: 0;
+}
+
+.vertical-separator {
+  width: 1px;
+  height: 40px; 
+  background-color: #ddd;
+  margin: 0 20px; 
 }
 
 .controls-row {
   display: flex;
   gap: 10px;
   height: 44px;
+  width: 100%; 
+  max-width: 300px; 
 }
 
 .quantity-input {
@@ -217,6 +249,7 @@ export default {
   border: 1px solid #ccc;
   border-radius: 4px;
   text-align: center;
+  margin: auto;
 }
 
 .add-btn {
@@ -229,8 +262,7 @@ export default {
   transition: background-color 0.2s;
   background-color: #ffe000;
   color: black;
-  margin-right: 15px;
-  margin-left: 15px;
+  margin: auto;
 }
 
 .add-btn:hover {
@@ -260,6 +292,25 @@ export default {
 }
 
 @media (max-width: 900px) {
+  .purchase-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .vertical-separator {
+    width: 100%; /* Turn into horizontal line */
+    height: 1px;
+    margin: 10px 0;
+  }
+  
+  .price-box, .controls-box {
+    width: 100%;
+  }
+  .controls-row {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
   .detail-container {
     flex-direction: column;
   }
