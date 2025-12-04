@@ -88,7 +88,11 @@ export default {
       fetch('/products')
         .then(response => response.json())
         .then(products => {
-          this.products = products
+          // Manually add the image path property so child components work automatically
+          this.products = products.map(p => ({
+            ...p,
+            image: `/products/${p.id}/image`
+          }));
         })
         .catch(error => console.log(error))
     },
