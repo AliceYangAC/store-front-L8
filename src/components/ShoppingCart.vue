@@ -217,6 +217,7 @@ export default {
 
       this.$emit('submitOrder', orderPayload);
     },
+    // FIX: Using ID-based URL construction
     getImageUrl(product) {
       if (!product || !product.id) return '/placeholder.png';
       return `/products/${product.id}/image`;
@@ -227,20 +228,19 @@ export default {
 
 <style scoped>
 .cart-container {
-  /* Set explicit height relative to viewport */
-  height: calc(100vh - 60px); 
-  width: 100%;
   max-width: 1000px;
-  margin: 30px auto; 
+  margin: 0 auto;
+  padding: 30px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevent the container itself from scrolling */
+  /* Set a max height for the whole container relative to viewport */
+  max-height: 80vh; 
+  overflow: hidden; /* Hide overflow on the main container */
 }
 
-/* This wrapper ensures the two main states (Cart View vs Checkout) inherit the flex column */
 .cart-content-wrapper {
     display: flex;
     flex-direction: column;
@@ -252,32 +252,29 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100%;
-    overflow: hidden; /* Ensures only internal children scroll */
+    overflow: hidden;
 }
 
 .cart-title {
   font-size: 1.8rem;
-  padding: 20px 30px; /* Moved padding inside */
-  margin: 0; /* Removed margin to close gaps */
+  margin-bottom: 20px;
   border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
   color: #111;
-  flex-shrink: 0; /* Important: Title never shrinks */
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 /* SCROLLABLE AREAS */
-.cart-items-scroll, .scroll-form {
+.cart-items-scroll {
     overflow-y: auto;
-    flex-grow: 1; /* This takes up all remaining space */
-    min-height: 0; /* CRITICAL: Prevents flex child from overflowing parent */
-    padding: 0 30px; /* Padding inside the scroll area */
-    
-    /* UX Improvement: Prevents scroll chaining to the main page */
-    overscroll-behavior: contain; 
+    flex-grow: 1; /* Take up available space */
+    border-bottom: 1px solid #eee;
 }
 
-/* Add top padding to the scroll content so it doesn't touch the header immediately */
-.cart-table, .form-section {
-    margin-top: 20px;
+.scroll-form {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-right: 10px; /* Space for scrollbar */
 }
 
 /* STICKY HEADER FOR TABLE */
@@ -286,7 +283,7 @@ export default {
     top: 0;
     background-color: white;
     z-index: 10;
-    box-shadow: 0 1px 0 #eee;
+    box-shadow: 0 1px 0 #eee; /* subtle border line */
 }
 
 .form-section {
@@ -393,11 +390,10 @@ td { padding: 20px 10px; border-bottom: 1px solid #f4f4f4; vertical-align: middl
     flex-direction: column; 
     align-items: flex-end; 
     border-top: 2px solid #eee; 
-    padding: 20px 30px; /* Moved padding inside */
-    margin-top: auto; 
-    flex-shrink: 0; /* Important: Summary footer never shrinks */
-    background: white; 
-    z-index: 10;
+    padding-top: 20px; 
+    margin-top: auto; /* Push to bottom */
+    flex-shrink: 0;
+    background: white; /* Ensure opaque background if content scrolls under */
 }
 
 .summary-row { display: flex; gap: 40px; margin-bottom: 20px; font-size: 1.2rem; }
@@ -408,5 +404,5 @@ td { padding: 20px 10px; border-bottom: 1px solid #f4f4f4; vertical-align: middl
 .empty-icon { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; }
 .continue-btn { margin-top: 20px; padding: 10px 25px; }
 .quantity-input { width: 60px; padding: 5px; text-align: center; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
-@media (max-width: 768px) { .cart-thumb { display: none; } .th-product { width: 40%; } .cart-container { padding: 0; margin: 10px; height: calc(100vh - 20px); } }
+@media (max-width: 768px) { .cart-thumb { display: none; } .th-product { width: 40%; } .cart-container { padding: 15px; } }
 </style>
